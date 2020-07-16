@@ -4,7 +4,7 @@ FROM php:alpine3.12
 LABEL maintainer="Justin"
 
 # 執行命令
-RUN apk --update add curl unzip
+RUN apk --update add curl
 
 # COPY本機檔案到Image
 COPY ./redis-set.php ./redis-get.php ./simple-twig.php ./composer.json ./composer.lock /var/www/html/
@@ -23,7 +23,7 @@ WORKDIR /var/www/html
 # 執行命令composer install安裝dependency
 RUN composer install
 
-# 宣高Container執行時對外開放的Port
+# 宣吿Container執行時對外開放的Port
 EXPOSE 8080
 
 # Container啟動後的執行指令
