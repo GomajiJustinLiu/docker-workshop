@@ -1,0 +1,36 @@
+version: "3"
+services: 
+  resque-redis:
+    image: redis:4.0-alpine
+    networks:
+      - resque-network
+  resque-receiver:
+    image: php:alpine3.12
+    volumes: 
+      - $PWD:/app
+    environment: 
+      - REDIS_BACKEND=resque-redis:6379
+      - QUEUE=default
+    networks: 
+      - resque-network
+    depends_on: 
+      - resque-redis
+    command: php /app/resque-receiver.php
+  resque-sender:
+    image: php:alpine3.12
+    volumes: 
+      - $PWD:/app
+    environment: 
+      - REDIS_BACKEND=redis:6379
+      - QUEUE=default
+    networks: 
+      - resque-network
+    depends_on: 
+      - resque-redis
+      - resque-receiver
+    command: php /app/resque-sender.php
+networks: 
+  resque-network:
+    ipam:
+      config:
+      - subnet: 172.27.0.0/16

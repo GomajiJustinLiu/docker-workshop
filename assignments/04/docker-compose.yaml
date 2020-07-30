@@ -1,0 +1,36 @@
+version: "3"
+services:
+  redis:
+    image: redis:4.0-alpine
+    networks:
+      - test-network
+  socket-server:
+    image: socket-server:latest
+    ports:
+      - 2021:2021
+    networks:
+      - test-network
+  message-receiver:
+    image: message-receiver:latest
+    environment:
+      - REDIS_BACKEND=redis:6379
+      - QUEUE=message
+    networks:
+      - test-network
+    depends_on:
+      - redis
+      - socket-server
+  message-api:
+    image: message-api:latest
+    environment:
+      - REDIS_BACKEND=redis:6379
+      - QUEUE=message
+    ports:
+      - 80:8080
+    networks:
+      - test-network
+    depends_on:
+      - redis
+      - message-receiver
+networks:
+  test-network:

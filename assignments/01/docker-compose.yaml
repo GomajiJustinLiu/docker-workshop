@@ -1,0 +1,11 @@
+version: "3"
+services:
+  web: 
+    volumes:
+      - $PWD:/app
+    environment:
+      - NAME=test
+    ports:
+      - 8080:80
+    image: php:alpine3.12
+    command: php -S 0.0.0.0:80 -t /app

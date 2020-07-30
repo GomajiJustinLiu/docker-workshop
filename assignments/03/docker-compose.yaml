@@ -1,0 +1,30 @@
+version: "3"
+services:
+  resque-receiver:
+    image: gomajijustinliu/resque-receiver:latest
+    depends_on: 
+      - redis
+    environment:
+      - REDIS_BACKEND=redis:6379
+      - QUEUE=default
+    networks:
+      - test-network
+  redis:
+    image: redis:4.0
+    ports: 
+      - 6379:6379
+    networks: 
+      - test-network
+  resque-sender:
+    image: gomajijustinliu/resque-sender:latest
+    depends_on: 
+      - redis
+      - resque-receiver
+    environment: 
+      - REDIS_BACKEND=redis:6379
+      - QUEUE=default
+    networks: 
+      - test-network
+networks: 
+  test-network:
+    driver: bridge

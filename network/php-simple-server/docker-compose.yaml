@@ -1,0 +1,22 @@
+version: "3"
+services:
+  redis:
+    image: redis:4.0
+    networks:
+      - test-network
+  php:
+    image: php:alpine3.12
+    volumes: 
+      - $PWD:/app
+    ports: 
+      - 8080:80
+    networks:
+      - test-network
+    depends_on: 
+      - redis
+    command: php -S 0.0.0.0:80 -t /app
+networks: 
+  test-network:
+    ipam:
+      config:
+      - subnet: 172.25.0.0/24
