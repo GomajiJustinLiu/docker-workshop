@@ -1,0 +1,4 @@
+#!/bin/sh
+
+date > /cont-init-sample/01_log
+sleep 1
